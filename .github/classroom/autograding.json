@@ -1,0 +1,14 @@
+{
+  "tests": [
+    {
+      "name": "Run tests",
+      "setup": "",
+      "run": "newman run -e postman/postman_environment.heroku.json postman/postman_collection.json",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 10
+    }
+  ]
+}
