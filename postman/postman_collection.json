@@ -1,0 +1,83 @@
+{
+	"info": {
+		"_postman_id": "5d002107-6dbc-4f9e-b695-6c66f112a051",
+		"name": "[hw2] Calculation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Calculation Request",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const variants = [",
+							"    {expr: \"2+2\", result: \"4.0\"},",
+							"    {expr: \"3 * 3\", result: \"9.0\"},",
+							"    {expr: \"3^3*3+3/3\", result: \"82.0\"},",
+							"    {expr: \"22 + 22\", result: \"44.0\"},",
+							"    {expr: \"(3+3)*(3-3^1)\", result: \"0.0\"},",
+							"    {expr: \"3-(3 + 3)*3\", result: \"-15.0\"},",
+							"    {expr: \"(3-(3 + 3)*3)\", result: \"-15.0\"}",
+							"]",
+							"",
+							"const baseUrl = pm.environment.get(\"baseUrl\")",
+							"variants.forEach(v => {",
+							"    var options = {",
+							"        method: \"POST\",",
+							"        url: `${baseUrl}/api/v1/eval`,",
+							"        header: {",
+							"            \"Accept\": \"text/plain\",",
+							"            \"Content-Type\": \"text/plain\"",
+							"        },",
+							"        body: v.expr",
+							"    }",
+							"",
+							"    pm.sendRequest(options, (error, response) => {",
+							"        pm.test(`Excepted calculation ${v.expr} = ${v.result}`, () => {",
+							"            pm.expect(response.status).to.be.eq(\"OK\")",
+							"            pm.expect(response.headers.get(\"Content-Type\")).to.contains(\"text/plain\");",
+							"            pm.expect(response.text()).to.be.eq(v.result)",
+							"        })",
+							"    })",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/plain",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "text/plain",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "2+2"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/eval",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"eval"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

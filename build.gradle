@@ -1,0 +1,52 @@
+plugins {
+    id "idea"
+    id "org.jetbrains.kotlin.jvm" version "1.6.10"
+    id "org.jetbrains.kotlin.plugin.spring" version "1.6.10"
+    id "org.springframework.boot" version "2.6.4"
+    id "io.spring.dependency-management" version "1.0.11.RELEASE"
+}
+
+ext {
+    springBootVersion = "2.6.4"
+}
+
+sourceCompatibility = 1.11
+targetCompatibility = 1.11
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+[compileKotlin, compileTestKotlin]*.kotlinOptions*.jvmTarget = "11"
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:$springBootVersion"
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-logging"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.jetbrains.kotlin:kotlin-reflect"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+bootJar {
+    archiveFileName = "${project.name}.jar"
+}
